@@ -1,0 +1,55 @@
+- name: git module 
+  hosts: localhost
+  vars:
+     repo: "git@github.com:PragatiRajpoot/TRIPTI-A.git"
+     dest: "/root/new_Folder"
+     sshkey: "/root/.ssh/id_rsa"
+     chdir: "/root/rajpoot1"
+  tasks:
+    - name: Git up to date?
+      ansible.builtin.git:
+        repo: "{{ repo }}"
+        dest: "{{ dest }}"
+        key_file: "{{ sshkey }}"
+        update: yes
+        version: master
+      register: git
+      ignore_errors: true
+    - debug: 
+        var: git 
+
+    - name: git - add
+      shell: "git add *"
+      args:
+        chdir: "{{ chdir }}"
+      register: gitadd
+    - debug: var=gitadd.stdout_lines
+
+    - name: git - commiting
+      shell: git commit -m "Initial commit"
+      args:
+        chdir: "{{ chdir }}"
+      register: gitcommit
+    - debug: var=gitcommit.stdout_lines
+
+    - name: git - push
+      shell: git push
+      args:
+       chdir: "{{ chdir }}"
+      register: gitpush
+    - debug: var=gitpush.stdout_lines
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
